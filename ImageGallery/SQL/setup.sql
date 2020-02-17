@@ -37,3 +37,13 @@ CREATE NONCLUSTERED INDEX [Index_ExpiresAtTime] ON [dbo].[CacheTable]
        ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 END
 GO
+
+IF NOT EXISTS 
+   (
+     SELECT name FROM master.dbo.sysdatabases 
+     WHERE name = N'Serilog'
+    )
+BEGIN
+CREATE DATABASE Serilog
+END
+GO
