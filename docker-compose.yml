@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  imagegallery:
+    image: ${DOCKER_REGISTRY-}imagegallery
+    build:
+      context: .
+      dockerfile: ImageGallery/Dockerfile
+    depends_on:
+    - imagegallery.api
+  imagegallery.api:
+    image: ${DOCKER_REGISTRY-}imagegalleryapi
+    build:
+      context: .
+      dockerfile: ImageGallery.API/Dockerfile
+
