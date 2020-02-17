@@ -22,6 +22,11 @@ namespace ImageGallery
         {
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
+                .WriteTo.MSSqlServer(
+                   connectionString: string.Format(Configuration.GetConnectionString("Serilog"), Environment.GetEnvironmentVariable("SA_PASSWORD")),
+                   tableName: "Logs",
+                   autoCreateSqlTable: true
+                   )
                 .CreateLogger();
 
             try

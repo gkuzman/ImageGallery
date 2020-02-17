@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: ImageGallery/Dockerfile
+    environment:
+      SA_PASSWORD: "MyPassword001"
     depends_on:
     - imagegallery.api
     - sqldb

@@ -29,10 +29,9 @@ namespace ImageGallery
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddDistributedSqlServerCache(x =>
             {
-                x.ConnectionString = "Server=sqldb;Initial Catalog=DistCache;User=sa;Password=MyPassword001;MultipleActiveResultSets=True";
+                x.ConnectionString = string.Format(Configuration.GetConnectionString("SqlCache"), Environment.GetEnvironmentVariable("SA_PASSWORD"));
                 x.SchemaName = "dbo";
                 x.TableName = "CacheTable";
-
             });
             services.AddSession(options =>
             {
