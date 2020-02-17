@@ -8,9 +8,18 @@ services:
       dockerfile: ImageGallery/Dockerfile
     depends_on:
     - imagegallery.api
+    - sqldb
   imagegallery.api:
     image: ${DOCKER_REGISTRY-}imagegalleryapi
     build:
       context: .
       dockerfile: ImageGallery.API/Dockerfile
-
+  sqldb:
+    build:
+      context: ./ImageGallery/SQL
+      dockerfile: Dockerfile
+    environment:
+            SA_PASSWORD: "MyPassword001"
+            ACCEPT_EULA: "Y"
+    ports:
+            - "1433:1433"
