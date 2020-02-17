@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 
 namespace ImageGallery
@@ -24,6 +26,18 @@ namespace ImageGallery
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddDistributedSqlServerCache(x =>
+            {
+                x.ConnectionString = "Server=sqldb;Initial Catalog=DistCache;User=sa;Password=MyPassword001;MultipleActiveResultSets=True";
+                x.SchemaName = "dbo";
+                x.TableName = "CacheTable";
+
+            });
+            services.AddSession(options =>
+            {
+                options.Cookie = new CookieBuilder { IsEssential = true, Name = "imagegallery.session" };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,7 +59,7 @@ namespace ImageGallery
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
