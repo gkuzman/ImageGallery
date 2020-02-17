@@ -14,6 +14,8 @@ services:
     build:
       context: .
       dockerfile: ImageGallery.API/Dockerfile
+    depends_on:
+      - mongo
   sqldb:
     build:
       context: ./ImageGallery/SQL
@@ -22,4 +24,30 @@ services:
             SA_PASSWORD: "MyPassword001"
             ACCEPT_EULA: "Y"
     ports:
-            - "1433:1433"
+            - "11433:1433"
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: MyPassword001
+    ports:
+      - 28017:27017
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: MyPassword001
+    depends_on:
+      - mongo
+  mongo-seed:
+    image: mongo
+    links:
+      - mongo
+    volumes:
+      - ./ImageGallery.API/seed-data:/seed-data
+    command:
+      'bash -c "mongoimport --host mongo --username root --password MyPassword001 --authenticationDatabase admin --db images --collection stockImages --file /seed-data/import.json --jsonArray"'
