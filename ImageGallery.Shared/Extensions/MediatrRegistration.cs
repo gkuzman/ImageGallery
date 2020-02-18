@@ -31,7 +31,7 @@ namespace ImageGallery.Shared.Extensions
 
         public void WithProcessingPipeline()
         {
-            _services.Decorate(typeof(IRequestHandler<,>), typeof(ProcessingPipeline<,>));
+            _services.Decorate(typeof(IPipelineBehavior<,>), typeof(ProcessingPipeline<,>));
         }
     }
 }

@@ -8,23 +8,23 @@ using System.Threading.Tasks;
 
 namespace ImageGallery.Shared.Pipelines
 {
-    public class ProcessingPipeline<TRequest, TResponse> : IRequestHandler<TRequest, TResponse> where TRequest : IRequest<TResponse> where TResponse : ResponseBase, new()
+    public class ProcessingPipeline<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse> where TResponse : ResponseBase, new()
     {
-        private readonly IRequestHandler<TRequest, TResponse> _inner;
+        private readonly IPipelineBehavior<TRequest, TResponse> _inner;
         private readonly ILogger<ProcessingPipeline<TRequest, TResponse>> _logger;
 
-        public ProcessingPipeline(IRequestHandler<TRequest, TResponse> inner, ILogger<ProcessingPipeline<TRequest, TResponse>> logger)
+        public ProcessingPipeline(IPipelineBehavior<TRequest, TResponse> inner, ILogger<ProcessingPipeline<TRequest, TResponse>> logger)
         {
             _inner = inner;
             _logger = logger;
         }
 
-        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
+        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
             var response = new TResponse();
             try
             {
-                response = await _inner.Handle(request, cancellationToken);
+                response = await _inner.Handle(request, cancellationToken, next);
                 return response;
             }
             catch (Exception ex)

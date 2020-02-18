@@ -1,7 +1,11 @@
 using System;
 using ImageGallery.DAL.Contexts;
+using ImageGallery.Services.Pipelines;
+using ImageGallery.Services.Requests;
+using ImageGallery.Services.Responses;
 using ImageGallery.Services.Services;
 using ImageGallery.Shared.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -40,6 +44,7 @@ namespace ImageGallery
                 options.UseSqlServer(string.Format(Configuration.GetConnectionString("ImageGalleryContext"), Environment.GetEnvironmentVariable("SA_PASSWORD")));
             });
 
+            services.AddTransient(typeof(IPipelineBehavior<GalleryLoadRequest, GalleryLoadResponse>), typeof(GalleryLoadPipeline));
             services.AddTransientMediatrFor(typeof(GalleryLoadService)).WithProcessingPipeline();
 
             services.AddSession(options =>
