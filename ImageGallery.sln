@@ -9,11 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageGallery.API", "ImageGa
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{8DE4AF42-5618-4645-AA80-B08440CA0ADA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageGallery.Services", "ImageGallery.Services\ImageGallery.Services.csproj", "{DA75D7BE-8D8F-49D5-B241-B741D81F3312}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageGallery.Services", "ImageGallery.Services\ImageGallery.Services.csproj", "{DA75D7BE-8D8F-49D5-B241-B741D81F3312}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageGallery.DAL", "ImageGallery.DAL\ImageGallery.DAL.csproj", "{9657C5BB-03F9-4132-B304-1ADB82C2115E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageGallery.DAL", "ImageGallery.DAL\ImageGallery.DAL.csproj", "{9657C5BB-03F9-4132-B304-1ADB82C2115E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageGallery.Entities", "ImageLibrary.Entities\ImageGallery.Entities.csproj", "{E8AE3BC5-C217-4A02-89D2-E73D115C5864}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageGallery.Shared", "ImageGallery.Shared\ImageGallery.Shared.csproj", "{E8AE3BC5-C217-4A02-89D2-E73D115C5864}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

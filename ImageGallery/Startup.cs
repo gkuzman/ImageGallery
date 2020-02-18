@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
+using ImageGallery.Services.Services;
+using ImageGallery.Shared.Pipelines;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -33,6 +33,15 @@ namespace ImageGallery
                 x.SchemaName = "dbo";
                 x.TableName = "CacheTable";
             });
+
+            services.AddMediatR((config) =>
+            {
+                config.AsTransient();
+            },
+                Assembly.GetAssembly(typeof(GalleryLoadService))
+            );
+
+            services.Decorate(typeof(IRequestHandler<,>), typeof(ProcessingPipeline<,>));
             services.AddSession(options =>
             {
                 options.Cookie = new CookieBuilder { IsEssential = true, Name = "imagegallery.session" };

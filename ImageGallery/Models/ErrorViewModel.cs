@@ -1,5 +1,3 @@
-using System;
-
 namespace ImageGallery.Models
 {
     public class ErrorViewModel
