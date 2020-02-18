@@ -1,9 +1,11 @@
 using System;
+using ImageGallery.DAL.Contexts;
 using ImageGallery.Services.Services;
 using ImageGallery.Shared.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -25,11 +27,17 @@ namespace ImageGallery
         {
             services.AddControllersWithViews();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddDistributedSqlServerCache(x =>
             {
                 x.ConnectionString = string.Format(Configuration.GetConnectionString("SqlCache"), Environment.GetEnvironmentVariable("SA_PASSWORD"));
                 x.SchemaName = "dbo";
                 x.TableName = "CacheTable";
+            });
+
+            services.AddDbContextPool<ImageGalleryContext>(options =>
+            {
+                options.UseSqlServer(string.Format(Configuration.GetConnectionString("ImageGalleryContext"), Environment.GetEnvironmentVariable("SA_PASSWORD")));
             });
 
             services.AddTransientMediatrFor(typeof(GalleryLoadService)).WithProcessingPipeline();
@@ -41,7 +49,7 @@ namespace ImageGallery
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -57,6 +65,11 @@ namespace ImageGallery
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            using (var dbContext = serviceProvider.GetService<ImageGalleryContext>())
+            {
+                dbContext.Database.Migrate();
+            };
 
             app.UseAuthorization();
             app.UseSession();
