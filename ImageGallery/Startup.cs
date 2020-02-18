@@ -1,10 +1,12 @@
 using System;
 using ImageGallery.DAL.Contexts;
+using ImageGallery.Services.Interfaces;
 using ImageGallery.Services.Pipelines;
 using ImageGallery.Services.Requests;
 using ImageGallery.Services.Responses;
 using ImageGallery.Services.Services;
 using ImageGallery.Shared.Extensions;
+using ImageGallery.Shared.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -46,6 +48,13 @@ namespace ImageGallery
 
             services.AddTransient(typeof(IPipelineBehavior<GalleryLoadRequest, GalleryLoadResponse>), typeof(GalleryLoadPipeline));
             services.AddTransientMediatrFor(typeof(GalleryLoadService)).WithProcessingPipeline();
+
+            services.Scan(scan =>
+            {
+                scan.FromAssembliesOf(typeof(ISessionAccessor))
+                .AddClasses(x => x.AssignableTo(typeof(ITransientService)))
+                .AsImplementedInterfaces().WithTransientLifetime();
+            });
 
             services.AddSession(options =>
             {
