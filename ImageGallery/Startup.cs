@@ -1,8 +1,6 @@
 using System;
-using System.Reflection;
 using ImageGallery.Services.Services;
-using ImageGallery.Shared.Pipelines;
-using MediatR;
+using ImageGallery.Shared.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -34,14 +32,8 @@ namespace ImageGallery
                 x.TableName = "CacheTable";
             });
 
-            services.AddMediatR((config) =>
-            {
-                config.AsTransient();
-            },
-                Assembly.GetAssembly(typeof(GalleryLoadService))
-            );
+            services.AddTransientMediatrFor(typeof(GalleryLoadService)).WithProcessingPipeline();
 
-            services.Decorate(typeof(IRequestHandler<,>), typeof(ProcessingPipeline<,>));
             services.AddSession(options =>
             {
                 options.Cookie = new CookieBuilder { IsEssential = true, Name = "imagegallery.session" };
