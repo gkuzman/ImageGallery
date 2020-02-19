@@ -1,5 +1,6 @@
 ﻿using ImageGallery.DAL.Entities;
 using ImageGallery.Services.Interfaces;
+using ImageGallery.Services.Responses;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,19 @@ namespace ImageGallery.Services.Services
             }
 
             return result;
+        }
+
+        public GalleryLoadResponse MapDBOToGalleryLoadResponse(IEnumerable<ImageDBO> images, int totalCount)
+        {
+            var response = new GalleryLoadResponse();
+            foreach (var image in images)
+            {
+                response.ImageIds.Add(image.Id);
+            }
+
+            response.Count = totalCount;
+
+            return response;
         }
     }
 }
