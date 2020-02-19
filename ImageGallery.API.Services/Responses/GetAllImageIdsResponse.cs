@@ -7,6 +7,6 @@ namespace ImageGallery.API.Services.Responses
 {
     public class GetAllImageIdsResponse : ResponseBase
     {
-        public List<string> ImageIds { get; set; } = new List<string>();
+        public IEnumerable<string> ImageIds { get; set; } = new List<string>();
     }
 }

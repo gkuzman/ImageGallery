@@ -1,3 +1,5 @@
+using ImageGallery.API.DAL.Services;
+using ImageGallery.API.DAL.Settings;
 using ImageGallery.API.Services.Services;
 using ImageGallery.Shared.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -23,6 +25,9 @@ namespace ImageGallery.API
             services.AddControllers();
 
             services.AddTransientMediatrFor(typeof(GetAllImageIdsService));
+            services.AddSingleton<ImageService>();
+
+            services.Configure<ImageDatabaseSettings>(options => Configuration.GetSection("ImageDatabaseSettings").Bind(options));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
