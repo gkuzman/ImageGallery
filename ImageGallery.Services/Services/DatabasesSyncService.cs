@@ -1,4 +1,5 @@
 ﻿using ImageGallery.Services.Interfaces;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -10,15 +11,39 @@ namespace ImageGallery.Services.Services
     public class DatabasesSyncService : IDatabasesSyncService
     {
         private readonly HttpClient _httpClient;
+        private readonly ILogger<DatabasesSyncService> _logger;
 
-        public DatabasesSyncService(HttpClient httpClient)
+        public DatabasesSyncService(HttpClient httpClient, ILogger<DatabasesSyncService> logger)
         {
             _httpClient = httpClient;
+            _logger = logger;
         }
-        public async Task SyncImageGallery()
+        public async Task SyncImageGallery(int retryCount = 0)
         {
-            var e = await _httpClient.GetAsync("/api/images/allids");
-            var content = await e.Content.ReadAsStringAsync();
+            try
+            {
+                if (retryCount > 3)
+                {
+                    throw new Exception("Couldnt import image ids from API");
+                }
+                var httpRequest = await _httpClient.GetAsync("/api/images/allids");
+
+                if (httpRequest.IsSuccessStatusCode)
+                {
+                    var content = await httpRequest.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    retryCount++;
+                    await Task.Delay(5000);
+                    await SyncImageGallery(retryCount);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(ex, "An exception occured while trying to import image ids from API");
+                throw;
+            }
         }
     }
 }

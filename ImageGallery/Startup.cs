@@ -17,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace ImageGallery
 {
@@ -108,6 +109,7 @@ namespace ImageGallery
 
             var syncService = serviceProvider.GetService<IDatabasesSyncService>();
             syncService.SyncImageGallery().GetAwaiter().GetResult();
+            Console.WriteLine("pera");
         }
     }
 }
