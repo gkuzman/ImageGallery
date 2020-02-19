@@ -17,7 +17,7 @@ namespace ImageGallery.Services.Services
         }
         public async Task SyncImageGallery()
         {
-            var e = await _httpClient.GetAsync("/weatherForecast");
+            var e = await _httpClient.GetAsync("/api/images/allids");
             var content = await e.Content.ReadAsStringAsync();
         }
     }

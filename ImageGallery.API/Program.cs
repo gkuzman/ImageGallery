@@ -1,10 +1,18 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.IO;
 
 namespace ImageGallery.API
 {
     public class Program
     {
+        public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development"}.json", optional: true)
+                .Build();
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();

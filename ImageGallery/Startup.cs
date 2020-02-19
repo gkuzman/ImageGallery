@@ -106,8 +106,8 @@ namespace ImageGallery
             });
 
 
-            var sp = serviceProvider.GetService<IDatabasesSyncService>();
-            sp.SyncImageGallery().GetAwaiter().GetResult();
+            var syncService = serviceProvider.GetService<IDatabasesSyncService>();
+            syncService.SyncImageGallery().GetAwaiter().GetResult();
         }
     }
 }
