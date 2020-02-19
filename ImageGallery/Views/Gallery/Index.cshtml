@@ -1,7 +1,22 @@
-﻿
+﻿@model ImageGallery.Models.GalleryViewModel
 @{
     ViewData["Title"] = "Voting";
 }
 
 <h1>Welcome to voting page</h1>
 
+<div class="row">
+    @if (Model.ImageURLS.Count > 0)
+    {
+        foreach (var imageURL in Model.ImageURLS)
+        {
+            <div class="col-md-4">
+                <div class="img-thumbnail">
+                    <a href="@imageURL">
+                        <img src="@imageURL" style="width:100%">
+                    </a>
+                </div>
+            </div>
+        }
+    }
+</div>

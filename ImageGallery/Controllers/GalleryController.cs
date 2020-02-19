@@ -1,4 +1,5 @@
-﻿using ImageGallery.Services.Requests;
+﻿using ImageGallery.Models;
+using ImageGallery.Services.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace ImageGallery.Controllers
         public async Task<IActionResult> Index(int pageNumber)
         {
             var result = await _mediator.Send(new GalleryLoadRequest(pageNumber));
-            return View();
+            return View(new GalleryViewModel(result));
         }
     }
 }
