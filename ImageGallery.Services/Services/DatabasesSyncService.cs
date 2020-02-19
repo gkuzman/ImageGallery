@@ -12,11 +12,15 @@ namespace ImageGallery.Services.Services
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<DatabasesSyncService> _logger;
+        private readonly IMapperService _mapperService;
+        private readonly IImageGalleryRepository _repository;
 
-        public DatabasesSyncService(HttpClient httpClient, ILogger<DatabasesSyncService> logger)
+        public DatabasesSyncService(HttpClient httpClient, ILogger<DatabasesSyncService> logger, IMapperService mapperService, IImageGalleryRepository repository)
         {
             _httpClient = httpClient;
             _logger = logger;
+            _mapperService = mapperService;
+            _repository = repository;
         }
         public async Task SyncImageGallery(int retryCount = 0)
         {
@@ -31,6 +35,8 @@ namespace ImageGallery.Services.Services
                 if (httpRequest.IsSuccessStatusCode)
                 {
                     var content = await httpRequest.Content.ReadAsStringAsync();
+                    var toInsert = _mapperService.MapApiResponseToImageEntities(content);
+                    await _repository.AddImages(toInsert);
                 }
                 else
                 {

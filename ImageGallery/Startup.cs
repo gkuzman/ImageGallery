@@ -109,7 +109,7 @@ namespace ImageGallery
 
             var syncService = serviceProvider.GetService<IDatabasesSyncService>();
             syncService.SyncImageGallery().GetAwaiter().GetResult();
-            Console.WriteLine("pera");
+            Console.WriteLine("Everything is set up. You can start using the app! :)");
         }
     }
 }
