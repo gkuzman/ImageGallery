@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using ImageGallery.DAL.Contexts;
 using ImageGallery.Services.Interfaces;
 using ImageGallery.Services.Pipelines;
@@ -49,6 +50,16 @@ namespace ImageGallery
             services.AddTransient(typeof(IPipelineBehavior<GalleryLoadRequest, GalleryLoadResponse>), typeof(GalleryLoadPipeline));
             services.AddTransientMediatrFor(typeof(GalleryLoadService)).WithProcessingPipeline();
 
+            services.AddHttpClient<IDatabasesSyncService, DatabasesSyncService>(client =>
+            {
+                client.BaseAddress = new Uri("https://imagegallery.api");
+            }).ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                var handler = new HttpClientHandler();
+                handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
+                return handler;
+            });
+
             services.Scan(scan =>
             {
                 scan.FromAssembliesOf(typeof(ISessionAccessor))
@@ -93,6 +104,10 @@ namespace ImageGallery
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+
+            var sp = serviceProvider.GetService<IDatabasesSyncService>();
+            sp.SyncImageGallery().GetAwaiter().GetResult();
         }
     }
 }
