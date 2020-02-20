@@ -22,9 +22,27 @@ namespace ImageGallery.Services.Services
 
             if (!_httpContext.HttpContext.Session.Keys.Any(x => string.Equals(x, "votes", StringComparison.OrdinalIgnoreCase)))
             {
-                var voteList = new List<string>();
+                var voteList = new Dictionary<string, int>();
                 _httpContext.HttpContext.Session.SetString("votes", JsonConvert.SerializeObject(voteList));
             }
+        }
+
+        public async Task<T> ReadFromSessionString<T>(string key) where T : new()
+        {
+            await _httpContext.HttpContext.Session.LoadAsync();
+            var fromSession = _httpContext.HttpContext.Session.GetString(key);
+            if (string.IsNullOrEmpty(fromSession))
+            {
+                return new T();
+            }
+
+            return JsonConvert.DeserializeObject<T>(fromSession);
+        }
+
+        public async Task SetObjectToStringSession<T>(string key, T value) where T : new()
+        {
+            await _httpContext.HttpContext.Session.LoadAsync();
+            _httpContext.HttpContext.Session.SetString(key, JsonConvert.SerializeObject(value));
         }
     }
 }
