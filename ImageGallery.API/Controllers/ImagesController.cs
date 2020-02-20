@@ -23,6 +23,7 @@ namespace ImageGallery.API.Controllers
         }
 
         [HttpGet("{imageId}")]
+        [ResponseCache(Duration = 300, Location = ResponseCacheLocation.Client)]
         public async Task<IActionResult> GetImage(string imageId)
         {
             var result = await _mediator.Send(new GetImageRequest { ImageId = imageId });

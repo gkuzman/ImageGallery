@@ -10,6 +10,8 @@ $(function () {
         var array = url.split('/');
         var id = array[array.length - 1];
         var mark = parseInt(dropdown.value);
+        $('select').prop('disabled', 'disabled');
+
         $.ajax({
             url: '/api/votes/add',
             type: 'PUT',
@@ -19,6 +21,10 @@ $(function () {
             success: function (data, status, xhr) {
                 var response = JSON.parse(xhr.responseText);
                 $('#votesCounter').html(response.votesLeft);
+
+                if (response.votingCompleted) {
+                    window.location("/gallery/summary");
+                };
             },
             error: function (xhr, status, text) {
                 var response = JSON.parse(xhr.responseText);
@@ -27,6 +33,9 @@ $(function () {
                 $(dropdown).val("0");
                 setTimeout(hideError, 5000);
             }
+        }).always(function () {
+            $('select').prop('disabled', false);
+            console.log('ma da');
         });
     });
 });
