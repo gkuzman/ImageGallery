@@ -6,6 +6,7 @@ using ImageGallery.Services.Pipelines;
 using ImageGallery.Services.Requests;
 using ImageGallery.Services.Responses;
 using ImageGallery.Services.Services;
+using ImageGallery.Services.Settings;
 using ImageGallery.Shared.Extensions;
 using ImageGallery.Shared.Interfaces;
 using MediatR;
@@ -50,10 +51,11 @@ namespace ImageGallery
 
             services.AddTransient(typeof(IPipelineBehavior<GalleryLoadRequest, GalleryLoadResponse>), typeof(GalleryLoadPipeline));
             services.AddTransientMediatrFor(typeof(GalleryLoadService)).WithProcessingPipeline();
+            services.Configure<ImageApiSettings>(options => Configuration.GetSection("ImageApiSettings").Bind(options));
 
             services.AddHttpClient<IDatabasesSyncService, DatabasesSyncService>(client =>
             {
-                client.BaseAddress = new Uri("https://imagegallery.api");
+                client.BaseAddress = new Uri(Configuration.GetSection("ImageApiSettings")["BaseAddress"]);
             }).ConfigurePrimaryHttpMessageHandler(() =>
             {
                 var handler = new HttpClientHandler();

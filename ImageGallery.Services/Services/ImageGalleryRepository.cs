@@ -20,11 +20,6 @@ namespace ImageGallery.Services.Services
         }
         public async  Task AddImages(List<ImageDBO> images)
         {
-            if (await _context.Images.AnyAsync())
-            {
-                return;
-            }
-
             await _context.Images.AddRangeAsync(images);
             await _context.SaveChangesAsync();
         }

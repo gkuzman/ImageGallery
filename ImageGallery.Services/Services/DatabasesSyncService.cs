@@ -1,5 +1,7 @@
 ﻿using ImageGallery.Services.Interfaces;
+using ImageGallery.Services.Settings;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -14,23 +16,33 @@ namespace ImageGallery.Services.Services
         private readonly ILogger<DatabasesSyncService> _logger;
         private readonly IMapperService _mapperService;
         private readonly IImageGalleryRepository _repository;
+        private readonly IOptions<ImageApiSettings> _settings;
 
-        public DatabasesSyncService(HttpClient httpClient, ILogger<DatabasesSyncService> logger, IMapperService mapperService, IImageGalleryRepository repository)
+        public DatabasesSyncService(HttpClient httpClient,
+            ILogger<DatabasesSyncService> logger,
+            IMapperService mapperService,
+            IImageGalleryRepository repository,
+            IOptions<ImageApiSettings> settings)
         {
             _httpClient = httpClient;
             _logger = logger;
             _mapperService = mapperService;
             _repository = repository;
+            _settings = settings;
         }
         public async Task SyncImageGallery(int retryCount = 0)
         {
             try
             {
+                if (await _repository.GetImagesCount() > 0)
+                {
+                    return;
+                }
                 if (retryCount > 3)
                 {
                     throw new Exception("Couldnt import image ids from API");
                 }
-                var httpRequest = await _httpClient.GetAsync("/api/images/allids");
+                var httpRequest = await _httpClient.GetAsync(_settings.Value.SeedEndpoint);
 
                 if (httpRequest.IsSuccessStatusCode)
                 {

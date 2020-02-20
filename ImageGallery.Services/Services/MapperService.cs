@@ -1,6 +1,8 @@
 ﻿using ImageGallery.DAL.Entities;
 using ImageGallery.Services.Interfaces;
 using ImageGallery.Services.Responses;
+using ImageGallery.Services.Settings;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,12 @@ namespace ImageGallery.Services.Services
 {
     public class MapperService : IMapperService
     {
+        private readonly IOptions<ImageApiSettings> _settings;
+
+        public MapperService(IOptions<ImageApiSettings> settings)
+        {
+            _settings = settings;
+        }
         public List<ImageDBO> MapApiResponseToImageEntities(string response)
         {
             var listOfIds = JsonConvert.DeserializeObject<List<string>>(response);
@@ -28,7 +36,7 @@ namespace ImageGallery.Services.Services
             var response = new GalleryLoadResponse();
             foreach (var image in images)
             {
-                response.ImageIds.Add(image.Id);
+                response.ImageIds.Add($"{_settings.Value.BaseAddress}{_settings.Value.GetImageEndpoint}{image.Id}");
             }
 
             response.Count = totalCount;
