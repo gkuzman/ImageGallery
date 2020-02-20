@@ -23,6 +23,11 @@ namespace ImageGallery.API.Services.Services
             var response = new GetImageResponse();
             var image = await _imageService.GetImage(request.ImageId);
 
+            if (image is null)
+            {
+                response.ErrorMessages.Add("Could not retrieve image from MongoDB");
+                return response;
+            }
             response.ImageId = image?.Id;
             response.Content = image?.Content;
 

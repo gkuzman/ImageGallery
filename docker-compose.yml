@@ -18,6 +18,15 @@ services:
       dockerfile: ImageGallery.API/Dockerfile
     depends_on:
       - mongo
+      - redis_image
+    links:
+      - redis_image
+  redis_image:
+    image: redis
+    container_name: redis
+    command: --port 6380
+    ports:
+      - "6380:6380"
   sqldb:
     build:
       context: ./ImageGallery/SQL

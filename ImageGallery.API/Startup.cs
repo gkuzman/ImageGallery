@@ -1,7 +1,11 @@
 using ImageGallery.API.DAL.Services;
 using ImageGallery.API.DAL.Settings;
+using ImageGallery.API.Services.Pipelines;
+using ImageGallery.API.Services.Requests;
+using ImageGallery.API.Services.Responses;
 using ImageGallery.API.Services.Services;
 using ImageGallery.Shared.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -24,7 +28,13 @@ namespace ImageGallery.API
         {
             services.AddControllers();
 
-            services.AddTransientMediatrFor(typeof(GetAllImageIdsService));
+            services.AddDistributedRedisCache(config =>
+            {
+                config.Configuration = Configuration.GetConnectionString("redis");
+            });
+
+            services.AddTransient(typeof(IPipelineBehavior<GetImageRequest, GetImageResponse>), typeof(GetImagePipeline));
+            services.AddTransientMediatrFor(typeof(GetAllImageIdsService)).WithProcessingPipeline();
             services.AddSingleton<ImageService>();
 
             services.Configure<ImageDatabaseSettings>(options => Configuration.GetSection("ImageDatabaseSettings").Bind(options));
