@@ -16,5 +16,7 @@ namespace ImageGallery.Services.Requests
         public int Skip => _pageNumber * NUMBER_OF_PICTURES;
 
         public int Take => NUMBER_OF_PICTURES;
+
+        public int PageNumber => _pageNumber;
     }
 }

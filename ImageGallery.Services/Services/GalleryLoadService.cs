@@ -2,6 +2,7 @@
 using ImageGallery.Services.Requests;
 using ImageGallery.Services.Responses;
 using MediatR;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,7 +23,14 @@ namespace ImageGallery.Services.Services
             var images = await _repository.GetImages(request.Skip, request.Take);
             var totalNumberOfImages = await _repository.GetImagesCount();
 
-            return _mapperService.MapDBOToGalleryLoadResponse(images, totalNumberOfImages);
+            if (images.Any())
+            {
+                return _mapperService.MapDBOToGalleryLoadResponse(images, totalNumberOfImages);
+            }
+
+            var response = new GalleryLoadResponse();
+            response.ErrorMessages.Add("Something went wront while tryint to retrieve images from the database");
+            return response;
         }
     }
 }
