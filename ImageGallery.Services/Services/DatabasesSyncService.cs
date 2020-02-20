@@ -46,7 +46,10 @@ namespace ImageGallery.Services.Services
                 {
                     var content = await httpRequest.Content.ReadAsStringAsync();
                     var toInsert = _mapperService.MapApiResponseToImageEntities(content);
-                    await _repository.AddImages(toInsert);
+                    if (await _repository.AddImages(toInsert) != toInsert.Count) 
+                    {
+                        throw new Exception("Not all images could be imported.");
+                    };
                 }
                 else
                 {

@@ -49,5 +49,26 @@ namespace ImageGallery.Services.Services
 
             return response;
         }
+
+        public async Task<IEnumerable<UserVoteDBO>> MapSessionDataToUserVotesDBO()
+        {
+            var votes = await _session.ReadFromSessionString<Dictionary<string, int>>("votes");
+
+            if (votes.Count != 10)
+            {
+                throw new System.Exception("Something went wrong! Cannot save the user votes");
+            }
+
+            var result = new List<UserVoteDBO>();
+
+            var sessionId = await _session.GetSessionIdAsync();
+
+            foreach (var vote in votes)
+            {
+                result.Add(new UserVoteDBO { ImageId = vote.Key, Mark = vote.Value, UserId = sessionId });
+            }
+
+            return result;
+        }
     }
 }

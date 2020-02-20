@@ -12,5 +12,7 @@ namespace ImageGallery.Services.Interfaces
         List<ImageDBO> MapApiResponseToImageEntities(string response);
 
         Task<GalleryLoadResponse> CreateGalleryLoadResponse(GalleryLoadRequest request, IEnumerable<string> imageIds, int totalCount);
+
+        Task<IEnumerable<UserVoteDBO>> MapSessionDataToUserVotesDBO();
     }
 }

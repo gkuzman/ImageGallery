@@ -27,6 +27,12 @@ namespace ImageGallery.Services.Services
             }
         }
 
+        public async Task<string> GetSessionIdAsync()
+        {
+            await _httpContext.HttpContext.Session.LoadAsync();
+            return _httpContext.HttpContext.Session.Id;
+        }
+
         public async Task<T> ReadFromSessionString<T>(string key) where T : new()
         {
             await _httpContext.HttpContext.Session.LoadAsync();

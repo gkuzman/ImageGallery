@@ -16,10 +16,10 @@ namespace ImageGallery.Services.Services
         {
             _context = context;
         }
-        public async  Task AddImages(List<ImageDBO> images)
+        public async Task<int> AddImages(List<ImageDBO> images)
         {
             await _context.Images.AddRangeAsync(images);
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<ImageDBO>> GetImages(int skip, int take)
@@ -30,6 +30,12 @@ namespace ImageGallery.Services.Services
         public async Task<int> GetImagesCount()
         {
             return await _context.Images.CountAsync();
+        }
+
+        public async Task<int> SaveUserVotes(IEnumerable<UserVoteDBO> userVotes)
+        {
+            await _context.UserVotes.AddRangeAsync(userVotes);
+            return await _context.SaveChangesAsync();
         }
     }
 }

@@ -17,6 +17,11 @@ namespace ImageGallery.Services.Pipelines
         }
         public async Task<GalleryLoadResponse> Handle(GalleryLoadRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<GalleryLoadResponse> next)
         {
+            if (await _sessionAccessor.ReadFromSessionString<bool>("votingDone"))
+            {
+                return new GalleryLoadResponse { VotingDone = true };
+            }
+
             await _sessionAccessor.InitializeSession();
             return await next();
         }

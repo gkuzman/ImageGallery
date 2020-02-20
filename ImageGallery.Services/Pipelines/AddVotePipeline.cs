@@ -49,6 +49,7 @@ namespace ImageGallery.Services.Pipelines
                 if (votesSoFar.Count == 10)
                 {
                     response = await next();
+                    await _session.SetObjectToStringSession("votingDone", response.VotingCompleted);
                 }
 
                 response.VotesLeft = 10 - votesSoFar.Count;

@@ -19,7 +19,22 @@ namespace ImageGallery.Controllers
         public async Task<IActionResult> Index(int pageNumber)
         {
             var result = await _mediator.Send(new GalleryLoadRequest(pageNumber));
+
+            if (result.VotingDone)
+            {
+                return RedirectToAction(nameof(Summary));
+            }
+            else if (result.HasErrors)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
             return View(new GalleryViewModel(result));
+        }
+
+        public async Task<IActionResult> Summary()
+        {
+            return Ok();
         }
     }
 }
