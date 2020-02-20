@@ -25,5 +25,12 @@ namespace ImageGallery.API.Controllers
             var result = await _mediator.Send(new GetAllImageIdsRequest());
             return Ok(result.ImageIds);
         }
+
+        [HttpGet("{imageId}")]
+        public async Task<IActionResult> GetImage(string imageId)
+        {
+            var result = await _mediator.Send(new GetImageRequest { ImageId = imageId });
+            return new FileContentResult(result.Content, "image/jpeg");
+        }
     }
 }

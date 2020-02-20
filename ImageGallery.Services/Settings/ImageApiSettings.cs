@@ -7,7 +7,9 @@ namespace ImageGallery.Services.Settings
 {
     public class ImageApiSettings
     {
-        public string BaseAddress { get; set; }
+        public string BaseInternalAddress { get; set; }
+
+        public string BaseExternalAddress { get; set; }
 
         public string SeedEndpoint { get; set; }
 

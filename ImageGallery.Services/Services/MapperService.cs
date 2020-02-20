@@ -36,7 +36,7 @@ namespace ImageGallery.Services.Services
             var response = new GalleryLoadResponse();
             foreach (var image in images)
             {
-                response.ImageIds.Add($"{_settings.Value.BaseAddress}{_settings.Value.GetImageEndpoint}{image.Id}");
+                response.ImageURLs.Add($"{_settings.Value.BaseExternalAddress}{_settings.Value.GetImageEndpoint}{image.Id}");
             }
 
             response.Count = totalCount;

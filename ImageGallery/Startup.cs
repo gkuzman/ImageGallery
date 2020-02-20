@@ -55,7 +55,7 @@ namespace ImageGallery
 
             services.AddHttpClient<IDatabasesSyncService, DatabasesSyncService>(client =>
             {
-                client.BaseAddress = new Uri(Configuration.GetSection("ImageApiSettings")["BaseAddress"]);
+                client.BaseAddress = new Uri(Configuration.GetSection("ImageApiSettings")["BaseInternalAddress"]);
             }).ConfigurePrimaryHttpMessageHandler(() =>
             {
                 var handler = new HttpClientHandler();
