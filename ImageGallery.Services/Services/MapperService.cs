@@ -1,5 +1,6 @@
 ﻿using ImageGallery.DAL.Entities;
 using ImageGallery.Services.Interfaces;
+using ImageGallery.Services.Requests;
 using ImageGallery.Services.Responses;
 using ImageGallery.Services.Settings;
 using Microsoft.Extensions.Options;
@@ -31,7 +32,7 @@ namespace ImageGallery.Services.Services
             return result;
         }
 
-        public GalleryLoadResponse MapDBOToGalleryLoadResponse(IEnumerable<ImageDBO> images, int totalCount)
+        public GalleryLoadResponse MapDBOToGalleryLoadResponse(GalleryLoadRequest request, IEnumerable<ImageDBO> images, int totalCount)
         {
             var response = new GalleryLoadResponse();
             foreach (var image in images)
@@ -40,6 +41,7 @@ namespace ImageGallery.Services.Services
             }
 
             response.Count = totalCount;
+            response.CurrentPage = request.PageNumber;
 
             return response;
         }

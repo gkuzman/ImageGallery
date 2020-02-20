@@ -8,5 +8,7 @@ namespace ImageGallery.Services.Responses
         public Dictionary<string, int> ImageURLsAndVotes { get; set; } = new Dictionary<string, int>();
 
         public int Count { get; set; }
+
+        public int CurrentPage { get; set; }
     }
 }

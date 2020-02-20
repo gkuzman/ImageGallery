@@ -1,4 +1,5 @@
 ﻿using ImageGallery.DAL.Entities;
+using ImageGallery.Services.Requests;
 using ImageGallery.Services.Responses;
 using ImageGallery.Shared.Interfaces;
 using System;
@@ -11,6 +12,6 @@ namespace ImageGallery.Services.Interfaces
     {
         List<ImageDBO> MapApiResponseToImageEntities(string response);
 
-        GalleryLoadResponse MapDBOToGalleryLoadResponse(IEnumerable<ImageDBO> images, int totalCount);
+        GalleryLoadResponse MapDBOToGalleryLoadResponse(GalleryLoadRequest request, IEnumerable<ImageDBO> images, int totalCount);
     }
 }

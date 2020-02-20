@@ -1,4 +1,5 @@
-﻿using ImageGallery.Services.Responses;
+﻿using ImageGallery.Services.Constants;
+using ImageGallery.Services.Responses;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,15 @@ namespace ImageGallery.Models
 
         public int Count { get; set; }
 
+        public int Current { get; set; }
+
+        public int TotalPages => (int)Math.Ceiling(decimal.Divide(Count, Constants.NUMBER_OF_PICTURES));
+
         public GalleryViewModel(GalleryLoadResponse galleryLoadResponse)
         {
             Count = galleryLoadResponse.Count;
             UrlsAndVotes = galleryLoadResponse.ImageURLsAndVotes;
+            Current = galleryLoadResponse.CurrentPage;
 
             Marks = new List<SelectListItem>
             {

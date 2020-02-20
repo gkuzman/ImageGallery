@@ -25,7 +25,7 @@ namespace ImageGallery.Services.Services
 
             if (images.Any())
             {
-                return _mapperService.MapDBOToGalleryLoadResponse(images, totalNumberOfImages);
+                return _mapperService.MapDBOToGalleryLoadResponse(request, images, totalNumberOfImages);
             }
 
             var response = new GalleryLoadResponse();

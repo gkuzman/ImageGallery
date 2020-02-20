@@ -5,18 +5,15 @@ namespace ImageGallery.Services.Requests
 {
     public class GalleryLoadRequest : IRequest<GalleryLoadResponse>
     {
-        private int _pageNumber;
-        private const int NUMBER_OF_PICTURES = 15;
-
         public GalleryLoadRequest(int pageNumber)
         {
-            _pageNumber = pageNumber;
+            PageNumber = pageNumber;
         }
 
-        public int Skip => _pageNumber * NUMBER_OF_PICTURES;
+        public int Skip => PageNumber * Constants.Constants.NUMBER_OF_PICTURES;
 
-        public int Take => NUMBER_OF_PICTURES;
+        public int Take => Constants.Constants.NUMBER_OF_PICTURES;
 
-        public int PageNumber => _pageNumber;
+        public int PageNumber { get; }
     }
 }
