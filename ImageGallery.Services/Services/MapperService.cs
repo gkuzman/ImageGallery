@@ -5,19 +5,20 @@ using ImageGallery.Services.Responses;
 using ImageGallery.Services.Settings;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace ImageGallery.Services.Services
 {
     public class MapperService : IMapperService
     {
         private readonly IOptions<ImageApiSettings> _settings;
+        private readonly ISessionAccessor _session;
 
-        public MapperService(IOptions<ImageApiSettings> settings)
+        public MapperService(IOptions<ImageApiSettings> settings, ISessionAccessor session)
         {
             _settings = settings;
+            _session = session;
         }
         public List<ImageDBO> MapApiResponseToImageEntities(string response)
         {
@@ -32,14 +33,17 @@ namespace ImageGallery.Services.Services
             return result;
         }
 
-        public GalleryLoadResponse MapDBOToGalleryLoadResponse(GalleryLoadRequest request, IEnumerable<ImageDBO> images, int totalCount)
+        public async Task<GalleryLoadResponse> CreateGalleryLoadResponse(GalleryLoadRequest request, IEnumerable<string> imageIds, int totalCount)
         {
             var response = new GalleryLoadResponse();
-            foreach (var image in images)
+            var castedVotes = await _session.ReadFromSessionString<Dictionary<string, int>>("votes");
+            foreach (var imageId in imageIds)
             {
-                response.ImageURLsAndVotes.Add($"{_settings.Value.BaseExternalAddress}{_settings.Value.GetImageEndpoint}{image.Id}", 1);
+                castedVotes.TryGetValue(imageId, out var vote);
+                response.ImageURLsAndVotes.Add($"{_settings.Value.BaseExternalAddress}{_settings.Value.GetImageEndpoint}{imageId}", vote);
             }
 
+            response.VotesRemaining = 10 - castedVotes.Count;
             response.Count = totalCount;
             response.CurrentPage = request.PageNumber;
 

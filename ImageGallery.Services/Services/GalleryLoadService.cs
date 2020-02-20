@@ -2,6 +2,9 @@
 using ImageGallery.Services.Requests;
 using ImageGallery.Services.Responses;
 using MediatR;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,25 +15,48 @@ namespace ImageGallery.Services.Services
     {
         private readonly IImageGalleryRepository _repository;
         private readonly IMapperService _mapperService;
+        private readonly IDistributedCache _cache;
 
-        public GalleryLoadService(IImageGalleryRepository repository, IMapperService mapperService)
+        public GalleryLoadService(IImageGalleryRepository repository, IMapperService mapperService, IDistributedCache cache)
         {
             _repository = repository;
             _mapperService = mapperService;
+            _cache = cache;
         }
         public async Task<GalleryLoadResponse> Handle(GalleryLoadRequest request, CancellationToken cancellationToken)
         {
-            var images = await _repository.GetImages(request.Skip, request.Take);
-            var totalNumberOfImages = await _repository.GetImagesCount();
+            var fromCache = await _cache.GetStringAsync(request.PageNumber.ToString());
+            var imageIdList = new List<string>();
+            var totalNumberOfImages = 0;
 
-            if (images.Any())
+            if (string.IsNullOrEmpty(fromCache))
             {
-                return _mapperService.MapDBOToGalleryLoadResponse(request, images, totalNumberOfImages);
+                var images = await _repository.GetImages(request.Skip, request.Take);
+                totalNumberOfImages = await _repository.GetImagesCount();
+
+                if (images.Any())
+                {
+                    foreach (var image in images)
+                    {
+                        imageIdList.Add(image.Id);
+                    }
+                    await _cache.SetStringAsync(request.PageNumber.ToString(), JsonConvert.SerializeObject(imageIdList));
+                    await _cache.SetStringAsync("total", totalNumberOfImages.ToString());
+                }
+                else
+                {
+                    var response = new GalleryLoadResponse();
+                    response.ErrorMessages.Add("Something went wront while trying to retrieve images from the database");
+                    return response;
+                }
+            }
+            else
+            {
+                imageIdList = JsonConvert.DeserializeObject<List<string>>(fromCache);
+                totalNumberOfImages = int.Parse(await _cache.GetStringAsync("total"));
             }
 
-            var response = new GalleryLoadResponse();
-            response.ErrorMessages.Add("Something went wront while trying to retrieve images from the database");
-            return response;
+            return await _mapperService.CreateGalleryLoadResponse(request, imageIdList, totalNumberOfImages);
         }
     }
 }

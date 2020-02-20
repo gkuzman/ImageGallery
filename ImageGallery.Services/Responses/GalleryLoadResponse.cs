@@ -10,5 +10,7 @@ namespace ImageGallery.Services.Responses
         public int Count { get; set; }
 
         public int CurrentPage { get; set; }
+
+        public int VotesRemaining { get; set; }
     }
 }

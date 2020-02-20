@@ -1,7 +1,4 @@
 ﻿using ImageGallery.Shared.Response;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ImageGallery.API.Services.Responses
 {

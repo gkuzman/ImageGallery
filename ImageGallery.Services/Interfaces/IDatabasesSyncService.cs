@@ -1,5 +1,4 @@
-﻿using ImageGallery.Shared.Interfaces;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace ImageGallery.Services.Interfaces
 {

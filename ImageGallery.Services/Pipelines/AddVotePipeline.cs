@@ -2,9 +2,7 @@
 using ImageGallery.Services.Requests;
 using ImageGallery.Services.Responses;
 using MediatR;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,22 +18,30 @@ namespace ImageGallery.Services.Pipelines
         }
         public async Task<AddVoteResponse> Handle(AddVoteRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<AddVoteResponse> next)
         {
-            var votesSoFar = await _session.ReadFromSessionString<Dictionary<string, int>>("votes");
             var response = new AddVoteResponse();
-            if (votesSoFar.Count > 10)
+
+            if (request.Mark > 10 || request.Mark < 0)
+            {
+                response.ErrorMessages.Add("Invalid mark");
+                return response;
+            }
+
+            var votesSoFar = await _session.ReadFromSessionString<Dictionary<string, int>>("votes");
+            
+            if (votesSoFar.Count >= 10)
             {
                 response.ErrorMessages.Add("You cannot have more than 10 votes");
                 return response;
             }
             else
             {
-                if (votesSoFar.ContainsKey(request.ImageId))
+                if (request.Mark > 0)
                 {
-                    votesSoFar[request.ImageId] = request.Mark;
+                    AddVote(request, votesSoFar);
                 }
                 else
                 {
-                    votesSoFar.Add(request.ImageId, request.Mark);
+                    RemoveVote(request, votesSoFar);
                 }
 
                 await _session.SetObjectToStringSession("votes", votesSoFar);
@@ -48,6 +54,26 @@ namespace ImageGallery.Services.Pipelines
                 response.VotesLeft = 10 - votesSoFar.Count;
 
                 return response;
+            }
+        }
+
+        private void AddVote(AddVoteRequest request, Dictionary<string, int> votesSoFar)
+        {
+            if (votesSoFar.ContainsKey(request.ImageId))
+            {
+                votesSoFar[request.ImageId] = request.Mark;
+            }
+            else
+            {
+                votesSoFar.Add(request.ImageId, request.Mark);
+            }
+        }
+
+        private void RemoveVote(AddVoteRequest request, Dictionary<string, int> votesSoFar)
+        {
+            if (votesSoFar.ContainsKey(request.ImageId))
+            {
+                votesSoFar.Remove(request.ImageId);
             }
         }
     }

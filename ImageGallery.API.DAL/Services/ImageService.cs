@@ -2,9 +2,7 @@
 using ImageGallery.API.DAL.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ImageGallery.API.DAL.Services

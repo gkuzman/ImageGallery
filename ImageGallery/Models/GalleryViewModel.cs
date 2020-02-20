@@ -3,8 +3,6 @@ using ImageGallery.Services.Responses;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ImageGallery.Models
 {
@@ -20,11 +18,14 @@ namespace ImageGallery.Models
 
         public int TotalPages => (int)Math.Ceiling(decimal.Divide(Count, Constants.NUMBER_OF_PICTURES));
 
+        public int VotesRemaining { get; set; }
+
         public GalleryViewModel(GalleryLoadResponse galleryLoadResponse)
         {
             Count = galleryLoadResponse.Count;
             UrlsAndVotes = galleryLoadResponse.ImageURLsAndVotes;
             Current = galleryLoadResponse.CurrentPage;
+            VotesRemaining = galleryLoadResponse.VotesRemaining;
 
             Marks = new List<SelectListItem>
             {
