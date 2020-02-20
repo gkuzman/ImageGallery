@@ -21,15 +21,11 @@ namespace ImageGallery.Services.Pipelines
         public async Task<AddVoteResponse> Handle(AddVoteRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<AddVoteResponse> next)
         {
             var votesSoFar = await _session.ReadFromSessionString<Dictionary<string, int>>("votes");
-
+            var response = new AddVoteResponse();
             if (votesSoFar.Count > 10)
             {
-                // return error
-                return null;
-            }
-            else if (votesSoFar.Count == 10)
-            {
-                return await next();
+                response.ErrorMessages.Add("You cannot have more than 10 votes");
+                return response;
             }
             else
             {
@@ -41,9 +37,17 @@ namespace ImageGallery.Services.Pipelines
                 {
                     votesSoFar.Add(request.ImageId, request.Mark);
                 }
-                
+
                 await _session.SetObjectToStringSession("votes", votesSoFar);
-                return new AddVoteResponse { VotesLeft = 10 - votesSoFar.Count };
+
+                if (votesSoFar.Count == 10)
+                {
+                    response = await next();
+                }
+
+                response.VotesLeft = 10 - votesSoFar.Count;
+
+                return response;
             }
         }
     }

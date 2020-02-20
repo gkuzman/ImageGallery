@@ -16,6 +16,8 @@ $(function () {
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             success: function (data, status, xhr) {
+                var response = JSON.parse(xhr.responseText);
+                $('#votesCounter').html(response.votesLeft);
             },
             error: function (xhr, status, text) {
                 var response = JSON.parse(xhr.responseText);
@@ -24,7 +26,7 @@ $(function () {
 
                 setTimeout(hideError, 5000);
             }
-        }); 
-    })
+        });
+    });
 });
 

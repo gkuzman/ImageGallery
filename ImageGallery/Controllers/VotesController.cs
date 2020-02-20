@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ImageGallery.Services.Requests;
+using ImageGallery.Shared.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,13 @@ namespace ImageGallery.Controllers
         public async Task<IActionResult> Add([FromBody]AddVoteRequest request)
         {
             var result = await _mediator.Send(request);
-            return BadRequest(new { Message = "sta da radim" });
+
+            if (result.HasErrors)
+            {
+                return BadRequest(new { Message = result.ErrorMessages.GetErrorMessagesFormated() });
+            }
+
+            return Ok(result);
         }
     }
 }
