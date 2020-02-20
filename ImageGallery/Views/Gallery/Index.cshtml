@@ -18,6 +18,10 @@
                         <img class="img-thumbnail" src="@imgUrl" alt="" style="width: 100%; height: 100px; object-fit:cover">
                     </a>
                 </div>
+                <div>
+                    <div style="float:left">Your vote: </div>
+                    <select asp-items="Model.Marks" style="float:right"></select>
+                </div>
             </div>
         }
     </div>
