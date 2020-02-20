@@ -9,7 +9,7 @@ namespace ImageGallery.Models
 {
     public class GalleryViewModel
     {
-        public List<string> ImageURLS { get; set; } = new List<string>();
+        public Dictionary<string, int> UrlsAndVotes { get; set; } = new Dictionary<string, int>();
 
         public List<SelectListItem> Marks { get; set; }
 
@@ -18,7 +18,7 @@ namespace ImageGallery.Models
         public GalleryViewModel(GalleryLoadResponse galleryLoadResponse)
         {
             Count = galleryLoadResponse.Count;
-            ImageURLS = galleryLoadResponse.ImageURLs;
+            UrlsAndVotes = galleryLoadResponse.ImageURLsAndVotes;
 
             Marks = new List<SelectListItem>
             {

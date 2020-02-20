@@ -10,21 +10,24 @@
     <hr class="mt-2 mb-5">
 
     <div class="row text-center text-lg-left">
-        @foreach (var imgUrl in Model.ImageURLS)
+        @foreach (var imgUrl in Model.UrlsAndVotes)
         {
             <div class="col-lg-3 col-md-4 col-6 img-thumbnail">
                 <div style="display:block">
-                    <a href="@imgUrl" target="_blank" class="d-block mb-4 h-100">
-                        <img class="img-thumbnail" src="@imgUrl" alt="" style="width: 100%; height: 100px; object-fit:cover">
+                    <a href="@imgUrl.Key" target="_blank" class="d-block mb-4 h-100">
+                        <img class="img-thumbnail" src="@imgUrl.Key" alt="" style="width: 100%; height: 100px; object-fit:cover">
                     </a>
                 </div>
                 <div>
                     <div style="float:left">Your vote: </div>
-                    <select asp-items="Model.Marks" style="float:right"></select>
+                    <select asp-items="Model.Marks" style="float:right" imageUrl="@imgUrl.Key" asp-for="@Model.UrlsAndVotes[imgUrl.Key]"></select>
                 </div>
             </div>
         }
     </div>
 
 </div>
+@section scripts{
+    <script src="~/js/dropdown.js"></script>
+}
 <!-- /.container -->

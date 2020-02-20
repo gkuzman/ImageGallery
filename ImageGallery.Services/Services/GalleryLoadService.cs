@@ -29,7 +29,7 @@ namespace ImageGallery.Services.Services
             }
 
             var response = new GalleryLoadResponse();
-            response.ErrorMessages.Add("Something went wront while tryint to retrieve images from the database");
+            response.ErrorMessages.Add("Something went wront while trying to retrieve images from the database");
             return response;
         }
     }

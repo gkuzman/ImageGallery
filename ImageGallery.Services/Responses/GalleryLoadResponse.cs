@@ -5,7 +5,7 @@ namespace ImageGallery.Services.Responses
 {
     public class GalleryLoadResponse : ResponseBase
     {
-        public List<string> ImageURLs { get; set; } = new List<string>();
+        public Dictionary<string, int> ImageURLsAndVotes { get; set; } = new Dictionary<string, int>();
 
         public int Count { get; set; }
     }
