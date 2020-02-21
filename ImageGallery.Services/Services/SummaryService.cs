@@ -21,7 +21,7 @@ namespace ImageGallery.Services.Services
         public async Task<SummaryResponse> Handle(SummaryRequest request, CancellationToken cancellationToken)
         {
             var response = new SummaryResponse();
-            var votes = await _repository.GetUserVotes(request.UserId);
+            var votes = await _repository.GetUserVotesAsync(request.UserId);
 
             if (votes.Count() != Constants.Constants.NUMBER_OF_VOTES)
             {

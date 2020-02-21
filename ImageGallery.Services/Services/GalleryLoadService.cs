@@ -31,8 +31,8 @@ namespace ImageGallery.Services.Services
 
             if (string.IsNullOrEmpty(fromCache))
             {
-                var images = await _repository.GetImages(request.Skip, request.Take);
-                totalNumberOfImages = await _repository.GetImagesCount();
+                var images = await _repository.GetImagesAsync(request.Skip, request.Take);
+                totalNumberOfImages = await _repository.GetImagesCountAsync();
 
                 if (images.Any())
                 {
@@ -56,7 +56,7 @@ namespace ImageGallery.Services.Services
                 totalNumberOfImages = int.Parse(await _cache.GetStringAsync(Constants.Constants.TOTAL));
             }
 
-            return await _mapperService.CreateGalleryLoadResponse(request, imageIdList, totalNumberOfImages);
+            return await _mapperService.CreateGalleryLoadResponseAsync(request, imageIdList, totalNumberOfImages);
         }
     }
 }

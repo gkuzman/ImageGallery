@@ -34,10 +34,10 @@ namespace ImageGallery.Services.Services
             return result;
         }
 
-        public async Task<GalleryLoadResponse> CreateGalleryLoadResponse(GalleryLoadRequest request, IEnumerable<string> imageIds, int totalCount)
+        public async Task<GalleryLoadResponse> CreateGalleryLoadResponseAsync(GalleryLoadRequest request, IEnumerable<string> imageIds, int totalCount)
         {
             var response = new GalleryLoadResponse();
-            var castedVotes = await _session.ReadFromSessionString<Dictionary<string, int>>(Constants.Constants.USER_VOTES);
+            var castedVotes = await _session.ReadFromSessionStringAsync<Dictionary<string, int>>(Constants.Constants.USER_VOTES);
             foreach (var imageId in imageIds)
             {
                 castedVotes.TryGetValue(imageId, out var vote);
@@ -51,9 +51,9 @@ namespace ImageGallery.Services.Services
             return response;
         }
 
-        public async Task<IEnumerable<UserVoteDBO>> MapSessionDataToUserVotesDBO()
+        public async Task<IEnumerable<UserVoteDBO>> MapSessionDataToUserVotesDBOAsync()
         {
-            var votes = await _session.ReadFromSessionString<Dictionary<string, int>>(Constants.Constants.USER_VOTES);
+            var votes = await _session.ReadFromSessionStringAsync<Dictionary<string, int>>(Constants.Constants.USER_VOTES);
 
             if (votes.Count != Constants.Constants.NUMBER_OF_VOTES)
             {

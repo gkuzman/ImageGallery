@@ -26,7 +26,7 @@ namespace ImageGallery.Services.Pipelines
                 return response;
             }
 
-            var votesSoFar = await _session.ReadFromSessionString<Dictionary<string, int>>(Constants.Constants.USER_VOTES);
+            var votesSoFar = await _session.ReadFromSessionStringAsync<Dictionary<string, int>>(Constants.Constants.USER_VOTES);
             
             if (votesSoFar.Count >= Constants.Constants.NUMBER_OF_VOTES)
             {
@@ -44,12 +44,12 @@ namespace ImageGallery.Services.Pipelines
                     RemoveVote(request, votesSoFar);
                 }
 
-                await _session.SetObjectToStringSession(Constants.Constants.USER_VOTES, votesSoFar);
+                await _session.SetObjectToStringSessionAsync(Constants.Constants.USER_VOTES, votesSoFar);
 
                 if (votesSoFar.Count == Constants.Constants.NUMBER_OF_VOTES)
                 {
                     response = await next();
-                    await _session.SetObjectToStringSession(Constants.Constants.VOTING_DONE, response.VotingCompleted);
+                    await _session.SetObjectToStringSessionAsync(Constants.Constants.VOTING_DONE, response.VotingCompleted);
                 }
 
                 response.VotesLeft = Constants.Constants.NUMBER_OF_VOTES - votesSoFar.Count;

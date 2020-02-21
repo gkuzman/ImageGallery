@@ -18,7 +18,7 @@ namespace ImageGallery.API.Services.Services
         public async Task<GetImageResponse> Handle(GetImageRequest request, CancellationToken cancellationToken)
         {
             var response = new GetImageResponse();
-            var image = await _imageService.GetImage(request.ImageId);
+            var image = await _imageService.GetImageAsync(request.ImageId);
 
             if (image is null)
             {

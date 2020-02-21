@@ -18,7 +18,7 @@ namespace ImageGallery.API.Services.Services
         public async Task<GetAllImageIdsResponse> Handle(GetAllImageIdsRequest request, CancellationToken cancellationToken)
         {
             var response = new GetAllImageIdsResponse();
-            response.ImageIds = await _imageService.GetAllIds();
+            response.ImageIds = await _imageService.GetAllIdsAsync();
             return response;
         }
     }

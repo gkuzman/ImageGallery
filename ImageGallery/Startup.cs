@@ -112,7 +112,7 @@ namespace ImageGallery
 
 
             var syncService = serviceProvider.GetService<IDatabasesSyncService>();
-            syncService.SyncImageGallery().GetAwaiter().GetResult();
+            syncService.SyncImageGalleryAsync().GetAwaiter().GetResult();
             Console.WriteLine("Everything is set up. You can start using the app! :)");
         }
     }

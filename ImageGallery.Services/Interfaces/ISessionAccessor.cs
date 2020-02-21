@@ -5,11 +5,11 @@ namespace ImageGallery.Services.Interfaces
 {
     public interface ISessionAccessor : ITransientService
     {
-        Task InitializeSession();
+        Task InitializeSessionAsync();
 
-        Task<T> ReadFromSessionString<T>(string key) where T : new();
+        Task<T> ReadFromSessionStringAsync<T>(string key) where T : new();
 
-        Task SetObjectToStringSession<T>(string key, T value) where T : new();
+        Task SetObjectToStringSessionAsync<T>(string key, T value) where T : new();
 
         Task<string> GetSessionIdAsync();
     }

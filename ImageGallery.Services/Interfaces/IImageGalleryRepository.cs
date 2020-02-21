@@ -7,14 +7,14 @@ namespace ImageGallery.Services.Interfaces
 {
     public interface IImageGalleryRepository : ITransientService
     {
-        Task<int> AddImages(List<ImageDBO> images);
+        Task<int> AddImagesAsync(List<ImageDBO> images);
 
-        Task<IEnumerable<ImageDBO>> GetImages(int skip, int take);
+        Task<IEnumerable<ImageDBO>> GetImagesAsync(int skip, int take);
 
-        Task<int> GetImagesCount();
+        Task<int> GetImagesCountAsync();
 
-        Task<int> SaveUserVotes(IEnumerable<UserVoteDBO> userVotes);
+        Task<int> SaveUserVotesAsync(IEnumerable<UserVoteDBO> userVotes);
 
-        Task<IEnumerable<UserVoteDBO>> GetUserVotes(string userId);
+        Task<IEnumerable<UserVoteDBO>> GetUserVotesAsync(string userId);
     }
 }

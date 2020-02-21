@@ -28,11 +28,11 @@ namespace ImageGallery.Services.Services
             _repository = repository;
             _settings = settings;
         }
-        public async Task SyncImageGallery(int retryCount = 0)
+        public async Task SyncImageGalleryAsync(int retryCount = 0)
         {
             try
             {
-                if (await _repository.GetImagesCount() > 0)
+                if (await _repository.GetImagesCountAsync() > 0)
                 {
                     return;
                 }
@@ -46,7 +46,7 @@ namespace ImageGallery.Services.Services
                 {
                     var content = await httpRequest.Content.ReadAsStringAsync();
                     var toInsert = _mapperService.MapApiResponseToImageEntities(content);
-                    if (await _repository.AddImages(toInsert) != toInsert.Count) 
+                    if (await _repository.AddImagesAsync(toInsert) != toInsert.Count) 
                     {
                         throw new Exception("Not all images could be imported.");
                     };
@@ -55,7 +55,7 @@ namespace ImageGallery.Services.Services
                 {
                     retryCount++;
                     await Task.Delay(5000);
-                    await SyncImageGallery(retryCount);
+                    await SyncImageGalleryAsync(retryCount);
                 }
             }
             catch (Exception ex)

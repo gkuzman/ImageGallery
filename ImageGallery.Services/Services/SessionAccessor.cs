@@ -16,7 +16,7 @@ namespace ImageGallery.Services.Services
         {
             _httpContext = httpContext;
         }
-        public async Task InitializeSession()
+        public async Task InitializeSessionAsync()
         {
             await _httpContext.HttpContext.Session.LoadAsync();
 
@@ -33,7 +33,7 @@ namespace ImageGallery.Services.Services
             return _httpContext.HttpContext.Session.Id;
         }
 
-        public async Task<T> ReadFromSessionString<T>(string key) where T : new()
+        public async Task<T> ReadFromSessionStringAsync<T>(string key) where T : new()
         {
             await _httpContext.HttpContext.Session.LoadAsync();
             var fromSession = _httpContext.HttpContext.Session.GetString(key);
@@ -45,7 +45,7 @@ namespace ImageGallery.Services.Services
             return JsonConvert.DeserializeObject<T>(fromSession);
         }
 
-        public async Task SetObjectToStringSession<T>(string key, T value) where T : new()
+        public async Task SetObjectToStringSessionAsync<T>(string key, T value) where T : new()
         {
             await _httpContext.HttpContext.Session.LoadAsync();
             _httpContext.HttpContext.Session.SetString(key, JsonConvert.SerializeObject(value));

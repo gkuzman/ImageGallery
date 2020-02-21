@@ -17,12 +17,12 @@ namespace ImageGallery.Services.Pipelines
         }
         public async Task<GalleryLoadResponse> Handle(GalleryLoadRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<GalleryLoadResponse> next)
         {
-            if (await _sessionAccessor.ReadFromSessionString<bool>(Constants.Constants.VOTING_DONE))
+            if (await _sessionAccessor.ReadFromSessionStringAsync<bool>(Constants.Constants.VOTING_DONE))
             {
                 return new GalleryLoadResponse { VotingDone = true };
             }
 
-            await _sessionAccessor.InitializeSession();
+            await _sessionAccessor.InitializeSessionAsync();
             return await next();
         }
     }

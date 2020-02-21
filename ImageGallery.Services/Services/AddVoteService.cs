@@ -20,8 +20,8 @@ namespace ImageGallery.Services.Services
         public async Task<AddVoteResponse> Handle(AddVoteRequest request, CancellationToken cancellationToken)
         {
             var response = new AddVoteResponse();
-            var votesDboList = await _mapper.MapSessionDataToUserVotesDBO();
-            var votesSaved = await _repository.SaveUserVotes(votesDboList);
+            var votesDboList = await _mapper.MapSessionDataToUserVotesDBOAsync();
+            var votesSaved = await _repository.SaveUserVotesAsync(votesDboList);
 
             if (votesSaved == Constants.Constants.NUMBER_OF_VOTES)
             {

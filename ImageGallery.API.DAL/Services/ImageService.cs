@@ -18,12 +18,12 @@ namespace ImageGallery.API.DAL.Services
             _images = db.GetCollection<ImageDBO>(settings.Value.ImagesCollectionName);
         }
 
-        public async Task<IEnumerable<string>> GetAllIds()
+        public async Task<IEnumerable<string>> GetAllIdsAsync()
         {
             return await _images.Find(image => true).Project(new ProjectionDefinitionBuilder<ImageDBO>().Expression(x => x.Id)).ToListAsync();
         }
 
-        public async Task<ImageDBO> GetImage(string imageId)
+        public async Task<ImageDBO> GetImageAsync(string imageId)
         {
             FilterDefinition<ImageDBO> filter = Builders<ImageDBO>.Filter.Eq(m => m.Id, imageId);
             return await _images.Find(filter).FirstOrDefaultAsync();
