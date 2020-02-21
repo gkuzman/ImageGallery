@@ -34,7 +34,22 @@ namespace ImageGallery.Controllers
 
         public async Task<IActionResult> Summary()
         {
-            return Ok();
+            var result = await _mediator.Send(new SummaryRequest());
+
+            if (result.ShowSummary)
+            {
+                return View(new SummaryViewModel());
+            }
+            else if (result.HasErrors)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            
         }
     }
 }

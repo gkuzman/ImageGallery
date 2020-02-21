@@ -50,6 +50,8 @@ namespace ImageGallery
 
             services.AddTransient(typeof(IPipelineBehavior<GalleryLoadRequest, GalleryLoadResponse>), typeof(GalleryLoadPipeline));
             services.AddTransient(typeof(IPipelineBehavior<AddVoteRequest, AddVoteResponse>), typeof(AddVotePipeline));
+            services.AddTransient(typeof(IPipelineBehavior<SummaryRequest, SummaryResponse>), typeof(SummaryPipeline));
+
             services.AddTransientMediatrFor(typeof(GalleryLoadService)).WithProcessingPipeline();
             services.Configure<ImageApiSettings>(options => Configuration.GetSection("ImageApiSettings").Bind(options));
 
