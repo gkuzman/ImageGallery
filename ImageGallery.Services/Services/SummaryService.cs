@@ -23,7 +23,7 @@ namespace ImageGallery.Services.Services
             var response = new SummaryResponse();
             var votes = await _repository.GetUserVotes(request.UserId);
 
-            if (votes.Count() != 10)
+            if (votes.Count() != Constants.Constants.NUMBER_OF_VOTES)
             {
                 response.ErrorMessages.Add("Something went wrong while trying to fetch the user votes");
                 response.ShowSummary = false;

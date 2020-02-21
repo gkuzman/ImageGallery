@@ -20,17 +20,17 @@ namespace ImageGallery.Services.Pipelines
         {
             var response = new AddVoteResponse();
 
-            if (request.Mark > 10 || request.Mark < 0)
+            if (request.Mark > Constants.Constants.MAX_MARK || request.Mark < 0)
             {
                 response.ErrorMessages.Add("Invalid mark");
                 return response;
             }
 
-            var votesSoFar = await _session.ReadFromSessionString<Dictionary<string, int>>("votes");
+            var votesSoFar = await _session.ReadFromSessionString<Dictionary<string, int>>(Constants.Constants.USER_VOTES);
             
-            if (votesSoFar.Count >= 10)
+            if (votesSoFar.Count >= Constants.Constants.NUMBER_OF_VOTES)
             {
-                response.ErrorMessages.Add("You cannot have more than 10 votes");
+                response.ErrorMessages.Add($"You cannot have more than {Constants.Constants.NUMBER_OF_VOTES} votes");
                 return response;
             }
             else
@@ -44,15 +44,15 @@ namespace ImageGallery.Services.Pipelines
                     RemoveVote(request, votesSoFar);
                 }
 
-                await _session.SetObjectToStringSession("votes", votesSoFar);
+                await _session.SetObjectToStringSession(Constants.Constants.USER_VOTES, votesSoFar);
 
-                if (votesSoFar.Count == 10)
+                if (votesSoFar.Count == Constants.Constants.NUMBER_OF_VOTES)
                 {
                     response = await next();
-                    await _session.SetObjectToStringSession("votingDone", response.VotingCompleted);
+                    await _session.SetObjectToStringSession(Constants.Constants.VOTING_DONE, response.VotingCompleted);
                 }
 
-                response.VotesLeft = 10 - votesSoFar.Count;
+                response.VotesLeft = Constants.Constants.NUMBER_OF_VOTES - votesSoFar.Count;
 
                 return response;
             }

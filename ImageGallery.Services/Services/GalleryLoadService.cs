@@ -41,7 +41,7 @@ namespace ImageGallery.Services.Services
                         imageIdList.Add(image.Id);
                     }
                     await _cache.SetStringAsync(request.PageNumber.ToString(), JsonConvert.SerializeObject(imageIdList));
-                    await _cache.SetStringAsync("total", totalNumberOfImages.ToString());
+                    await _cache.SetStringAsync(Constants.Constants.TOTAL, totalNumberOfImages.ToString());
                 }
                 else
                 {
@@ -53,7 +53,7 @@ namespace ImageGallery.Services.Services
             else
             {
                 imageIdList = JsonConvert.DeserializeObject<List<string>>(fromCache);
-                totalNumberOfImages = int.Parse(await _cache.GetStringAsync("total"));
+                totalNumberOfImages = int.Parse(await _cache.GetStringAsync(Constants.Constants.TOTAL));
             }
 
             return await _mapperService.CreateGalleryLoadResponse(request, imageIdList, totalNumberOfImages);

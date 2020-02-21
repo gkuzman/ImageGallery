@@ -20,10 +20,10 @@ namespace ImageGallery.Services.Services
         {
             await _httpContext.HttpContext.Session.LoadAsync();
 
-            if (!_httpContext.HttpContext.Session.Keys.Any(x => string.Equals(x, "votes", StringComparison.OrdinalIgnoreCase)))
+            if (!_httpContext.HttpContext.Session.Keys.Any(x => string.Equals(x, Constants.Constants.USER_VOTES, StringComparison.OrdinalIgnoreCase)))
             {
                 var voteList = new Dictionary<string, int>();
-                _httpContext.HttpContext.Session.SetString("votes", JsonConvert.SerializeObject(voteList));
+                _httpContext.HttpContext.Session.SetString(Constants.Constants.USER_VOTES, JsonConvert.SerializeObject(voteList));
             }
         }
 

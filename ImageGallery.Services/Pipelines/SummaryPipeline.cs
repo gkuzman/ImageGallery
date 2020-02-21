@@ -18,7 +18,7 @@ namespace ImageGallery.Services.Pipelines
         public async Task<SummaryResponse> Handle(SummaryRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<SummaryResponse> next)
         {
             var response = new SummaryResponse();
-            if (!await _session.ReadFromSessionString<bool>("votingDone"))
+            if (!await _session.ReadFromSessionString<bool>(Constants.Constants.VOTING_DONE))
             {
                 response.ShowSummary = false;
             }

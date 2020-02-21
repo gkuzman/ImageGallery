@@ -37,14 +37,14 @@ namespace ImageGallery.Services.Services
         public async Task<GalleryLoadResponse> CreateGalleryLoadResponse(GalleryLoadRequest request, IEnumerable<string> imageIds, int totalCount)
         {
             var response = new GalleryLoadResponse();
-            var castedVotes = await _session.ReadFromSessionString<Dictionary<string, int>>("votes");
+            var castedVotes = await _session.ReadFromSessionString<Dictionary<string, int>>(Constants.Constants.USER_VOTES);
             foreach (var imageId in imageIds)
             {
                 castedVotes.TryGetValue(imageId, out var vote);
                 response.ImageURLsAndVotes.Add($"{_settings.Value.BaseExternalAddress}{_settings.Value.GetImageEndpoint}{imageId}", vote);
             }
 
-            response.VotesRemaining = 10 - castedVotes.Count;
+            response.VotesRemaining = Constants.Constants.NUMBER_OF_VOTES - castedVotes.Count;
             response.Count = totalCount;
             response.CurrentPage = request.PageNumber;
 
@@ -53,9 +53,9 @@ namespace ImageGallery.Services.Services
 
         public async Task<IEnumerable<UserVoteDBO>> MapSessionDataToUserVotesDBO()
         {
-            var votes = await _session.ReadFromSessionString<Dictionary<string, int>>("votes");
+            var votes = await _session.ReadFromSessionString<Dictionary<string, int>>(Constants.Constants.USER_VOTES);
 
-            if (votes.Count != 10)
+            if (votes.Count != Constants.Constants.NUMBER_OF_VOTES)
             {
                 throw new System.Exception("Something went wrong! Cannot save the user votes");
             }

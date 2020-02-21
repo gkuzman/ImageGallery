@@ -23,7 +23,7 @@ namespace ImageGallery.Services.Services
             var votesDboList = await _mapper.MapSessionDataToUserVotesDBO();
             var votesSaved = await _repository.SaveUserVotes(votesDboList);
 
-            if (votesSaved == 10)
+            if (votesSaved == Constants.Constants.NUMBER_OF_VOTES)
             {
                 response.VotingCompleted = true;
             }
