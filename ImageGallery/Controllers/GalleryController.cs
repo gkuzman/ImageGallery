@@ -36,20 +36,18 @@ namespace ImageGallery.Controllers
         {
             var result = await _mediator.Send(new SummaryRequest());
 
-            if (result.ShowSummary)
-            {
-                return View(new SummaryViewModel());
-            }
-            else if (result.HasErrors)
+            if (result.HasErrors)
             {
                 return RedirectToAction("Error", "Home");
+            }
+            else if (result.ShowSummary)
+            {
+                return View(new SummaryViewModel(result));
             }
             else
             {
                 return RedirectToAction(nameof(Index));
             }
-
-            
         }
     }
 }

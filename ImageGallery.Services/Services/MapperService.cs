@@ -6,6 +6,7 @@ using ImageGallery.Services.Settings;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ImageGallery.Services.Services
@@ -69,6 +70,27 @@ namespace ImageGallery.Services.Services
             }
 
             return result;
+        }
+
+        public SummaryResponse MapVotesToSummaryResponse(IEnumerable<UserVoteDBO> votes)
+        {
+            var response = new SummaryResponse();
+            foreach (var vote in votes)
+            {
+                response.ImagesWithSummaries.Add($"{_settings.Value.BaseExternalAddress}{_settings.Value.GetImageEndpoint}{vote.ImageId}", GetImageSummary(vote));
+            }
+
+            return response;
+        }
+
+        private ImageSummary GetImageSummary(UserVoteDBO vote)
+        {
+            var summary = new ImageSummary();
+            summary.UserVote = vote.Mark;
+            summary.TotalVotes = vote.Image.UserVotes.Count();
+            summary.AverageVote = decimal.Divide(vote.Image.UserVotes.Sum(x => x.Mark), summary.TotalVotes);
+
+            return summary;
         }
     }
 }

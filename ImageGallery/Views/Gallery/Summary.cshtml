@@ -1,26 +1,28 @@
 ﻿@model ImageGallery.Models.SummaryViewModel
 @{
-    ViewData["Title"] = "Voting";
+    ViewData["Title"] = "Summary";
 }
 
-@*<div class="container">
+<div class="container">
 
-    <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0">Remaining votes - <span id="votesCounter">@Model.VotesRemaining</span></h1>
+    <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0">Summary page - overview of images you voted on</h1>
 
     <hr class="mt-2 mb-5">
 
     <div class="row text-center text-lg-left">
-        @foreach (var imgUrl in Model.UrlsAndVotes)
+        @foreach (var imgSummary in Model.ImageSummaries)
         {
             <div class="col-md-12 img-thumbnail">
                 <div class="row text-center text-lg-left">
                     <div class="col-md-8">
-                        <a href="@imgUrl.Key" target="_blank" class="d-block mb-4 h-100">
-                            <img class="img-thumbnail" src="@imgUrl.Key" alt="" style="width: 100%; height: 300px; object-fit:cover">
+                        <a href="@imgSummary.Key" target="_blank" class="d-block mb-4 h-100">
+                            <img class="img-thumbnail" src="@imgSummary.Key" alt="" style="width: 100%; height: 300px; object-fit:cover">
                         </a>
                     </div>
                     <div class="col-md-4">
-                        this
+                        <div class="text-center">Your vote: @imgSummary.Value.UserVote</div>
+                        <div class="text-center">Average vote: @imgSummary.Value.AverageVote</div>
+                        <div class="text-center">Total votes: @imgSummary.Value.TotalVotes</div>
                     </div>
                 </div>
             </div>
@@ -28,4 +30,4 @@
         }
     </div>
 
-</div>*@
+</div>

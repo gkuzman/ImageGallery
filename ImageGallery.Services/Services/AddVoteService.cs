@@ -2,7 +2,6 @@
 using ImageGallery.Services.Requests;
 using ImageGallery.Services.Responses;
 using MediatR;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 

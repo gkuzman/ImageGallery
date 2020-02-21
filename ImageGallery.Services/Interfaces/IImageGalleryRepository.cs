@@ -14,5 +14,7 @@ namespace ImageGallery.Services.Interfaces
         Task<int> GetImagesCount();
 
         Task<int> SaveUserVotes(IEnumerable<UserVoteDBO> userVotes);
+
+        Task<IEnumerable<UserVoteDBO>> GetUserVotes(string userId);
     }
 }

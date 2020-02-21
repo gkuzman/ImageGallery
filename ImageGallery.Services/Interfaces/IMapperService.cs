@@ -14,5 +14,7 @@ namespace ImageGallery.Services.Interfaces
         Task<GalleryLoadResponse> CreateGalleryLoadResponse(GalleryLoadRequest request, IEnumerable<string> imageIds, int totalCount);
 
         Task<IEnumerable<UserVoteDBO>> MapSessionDataToUserVotesDBO();
+
+        SummaryResponse MapVotesToSummaryResponse(IEnumerable<UserVoteDBO> votes);
     }
 }
