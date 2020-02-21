@@ -8,6 +8,7 @@ If less than 10 votes are cast, they will be not saved in the database.
 # Running locally
 
 Clone or download the solution to your local drive.
+SEE [WARNING](https://github.com/gkuzman/ImageGallery/blob/master/README.md#warning)
 
 ## Prerequisites
 1) Docker for windows installed on the PC with linux containers. Running ofc.
